@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.velocity.velocityhire.dto.UserDTO;
 import com.velocity.velocityhire.dto.UserUpdateDTO;
 import com.velocity.velocityhire.entity.User;
 import com.velocity.velocityhire.repository.UserRepository;
@@ -47,23 +46,25 @@ public class UserService {
             .orElseThrow(() -> new EntityNotFoundException("User not found with id:" + id));
     }
 
-    public boolean update(long id, UserUpdateDTO userDTO) {
+    public boolean update(long id, UserUpdateDTO userUpdateDTO) {
         Optional<User> userOptional = userRepository.findById(id);
         if (userOptional.isPresent()) {
             User user = userOptional.get();
 
-            if (userDTO.getFirstName() != null) {
-                user.setFirstName(userDTO.getFirstName());
+            if (userUpdateDTO.getFirstName() != null) {
+                user.setFirstName(userUpdateDTO.getFirstName());
             }
-            if (userDTO.getLastName() != null) {
-                user.setLastName(userDTO.getLastName());
+            if (userUpdateDTO.getLastName() != null) {
+                user.setLastName(userUpdateDTO.getLastName());
             }
-            if (userDTO.getEmail() != null) {
-                user.setEmail(userDTO.getEmail());
+            if (userUpdateDTO.getEmail() != null) {
+                user.setEmail(userUpdateDTO.getEmail());
             }
 
-            userRepository.save(user);
-            return true;
+            if (user != null) {
+                userRepository.save(user);
+                return true;
+            }
         }
         return false;
     }

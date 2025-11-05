@@ -1,14 +1,8 @@
 package com.velocity.velocityhire.dto;
 
-import java.time.LocalDateTime;
-
-import com.velocity.velocityhire.enums.JobStatus;
-
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -19,9 +13,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class JobDTO {
-    private Long id; // Use Long instead of long for nullable ID
-    
+public class JobCreateDTO {
     @NotBlank(message = "Job title is required")
     @Size(min = 5, max = 100, message = "Title must be between 5 and 100 characters")
     private String title;
@@ -41,17 +33,6 @@ public class JobDTO {
     @Digits(integer = 4, fraction = 2, message = "Hourly rate format is invalid")
     private Double hourlyRate;
     
-    @NotNull(message = "Status is required")
-    private JobStatus status; // Use enum instead of string
-    
-    @NotNull(message = "Posted by user ID is required")
-    @Positive(message = "Posted by user ID must be positive")
-    private Long postedById;
-    
-    // Optional: Add audit fields
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
-    
-    // Optional: Add poster info
-    private String postedByName; // For display purposes
+    // Status will be set to "OPEN" by default in service layer
+    // postedById will be extracted from authenticated user context
 }

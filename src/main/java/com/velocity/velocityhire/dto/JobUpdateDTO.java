@@ -1,14 +1,8 @@
 package com.velocity.velocityhire.dto;
 
-import java.time.LocalDateTime;
-
-import com.velocity.velocityhire.enums.JobStatus;
-
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Digits;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -19,18 +13,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class JobDTO {
-    private Long id; // Use Long instead of long for nullable ID
-    
-    @NotBlank(message = "Job title is required")
+public class JobUpdateDTO {
     @Size(min = 5, max = 100, message = "Title must be between 5 and 100 characters")
     private String title;
     
-    @NotBlank(message = "Job description is required")
     @Size(min = 20, max = 5000, message = "Description must be between 20 and 5000 characters")
     private String description;
     
-    @NotBlank(message = "Category is required")
     private String category;
     
     @DecimalMin(value = "0.0", inclusive = false, message = "Budget must be greater than 0")
@@ -41,17 +30,10 @@ public class JobDTO {
     @Digits(integer = 4, fraction = 2, message = "Hourly rate format is invalid")
     private Double hourlyRate;
     
-    @NotNull(message = "Status is required")
-    private JobStatus status; // Use enum instead of string
+    @Pattern(regexp = "OPEN|IN_PROGRESS|COMPLETED|CANCELLED", 
+             message = "Status must be OPEN, IN_PROGRESS, COMPLETED, or CANCELLED")
+    private String status;
     
-    @NotNull(message = "Posted by user ID is required")
-    @Positive(message = "Posted by user ID must be positive")
-    private Long postedById;
-    
-    // Optional: Add audit fields
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
-    
-    // Optional: Add poster info
-    private String postedByName; // For display purposes
+    // No validation annotations like @NotBlank for update operations
+    // Allows partial updates
 }

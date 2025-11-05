@@ -44,7 +44,12 @@ public class UserController {
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse<UserDTO>> findUser(@PathVariable("id") long id) {
         User user = userService.find(id);
-        UserDTO userDTO = new UserDTO(user.getId(), user.getFirstName(), user.getLastName(), user.getEmail());
+        UserDTO userDTO = UserDTO.builder()
+            .id(user.getId())
+            .firstName(user.getFirstName())
+            .lastName(user.getLastName())
+            .email(user.getEmail())
+            .build();
 
         ApiResponse<UserDTO> response = new ApiResponse<>(userDTO, "User found successfully");
         return ResponseEntity.ok(response);
@@ -52,7 +57,11 @@ public class UserController {
 
     @PostMapping
     public ResponseEntity<ApiResponse<UserDTO>> createUser(@RequestBody UserCreateDTO userCreateDTO) {
-        User user = new User(userCreateDTO.getFirstName(), userCreateDTO.getLastName(), userCreateDTO.getEmail(), userCreateDTO.getPassword());
+        User user = User.builder()
+            .firstName(userCreateDTO.getFirstName())
+            .lastName(userCreateDTO.getLastName())
+            .email(userCreateDTO.getEmail())
+            .build();
         User savedUser = userService.register(user, userCreateDTO.getPassword());
 
         UserDTO userDTO = new UserDTO(savedUser.getId(), savedUser.getFirstName(), savedUser.getLastName(), savedUser.getEmail());
